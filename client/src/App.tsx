@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link, RouteProps } from 'react-
 import Login from './components/Login'
 import SignUp from './components/Register'
 import { useState } from 'react'
-
+import UserDet from "./components/Details"
 
 
 function App() {
@@ -40,6 +40,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/userDetails" element={<UserDet />} />
             </Routes>
           </div>
         </div>

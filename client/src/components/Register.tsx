@@ -1,7 +1,7 @@
 import React, { Component, ReactEventHandler, useEffect, useState } from 'react'
 
 
-type SignUp = {
+type RegisterType = {
   fname: string,
   lname: string,
   email: string,
@@ -18,12 +18,11 @@ const Register = () => {
       password: ""
     }
   
-    const [signUp, setSignUp] = useState<SignUp>(initialSignUp)
+    const [signUp, setSignUp] = useState<RegisterType>(initialSignUp)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const { fname, lname, email, password } = signUp
-      console.log(fname, lname, email, password)
       fetch("http://localhost:5000/register", {
         method: "POST",
         headers: {

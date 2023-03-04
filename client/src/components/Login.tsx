@@ -1,9 +1,48 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
-export default class Login extends Component {
-  render() {
+export type LoginType = {
+  email: string,
+  password: string
+}
+
+  const Login: React.FC = () => {
+    
+    const initialLogin: LoginType = { 
+      email: "",
+      password: ""
+    }
+
+    const [login, setLogin] = useState<LoginType>(initialLogin);
+
+
+    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const { email, password } = login;
+      console.log(email, password)
+      fetch("http://localhost:5000/login-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      })
+      .then((res: Response) => { return res.json() })
+      .then((data) => {
+        if (data.status === "ok") {
+          alert("login sucessful")
+        }
+        window.localStorage.setItem("token", data.data)
+        window.location.href="./userDetails"
+      })
+    }
+
     return (
-      <form>
+      <form onSubmit={handleSubmit}>
         <h3>Sign In</h3>
 
         <div className="mb-3">
@@ -12,6 +51,7 @@ export default class Login extends Component {
             type="email"
             className="form-control"
             placeholder="Enter email"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogin({ ...login, email: e.target.value } )}
           />
         </div>
 
@@ -21,7 +61,8 @@ export default class Login extends Component {
             type="password"
             className="form-control"
             placeholder="Enter password"
-          />
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogin({ ...login, password: e.target.value } )}
+/>
         </div>
 
         <div className="mb-3">
@@ -47,5 +88,6 @@ export default class Login extends Component {
         </p>
       </form>
     )
-  }
 }
+
+export default Login
