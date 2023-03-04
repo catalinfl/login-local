@@ -1,7 +1,7 @@
 import React, { Component, ReactEventHandler, useEffect, useState } from 'react'
 
 
-type SignUp = {
+type RegisterType = {
   fname: string,
   lname: string,
   email: string,
@@ -18,7 +18,7 @@ const Register = () => {
       password: ""
     }
   
-    const [signUp, setSignUp] = useState<SignUp>(initialSignUp)
+    const [signUp, setSignUp] = useState<RegisterType>(initialSignUp)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();

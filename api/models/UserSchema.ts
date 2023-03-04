@@ -10,7 +10,7 @@ export type UserSchemaType = {
 const UserSchema = new mongoose.Schema<UserSchemaType>({
     fname: String,
     lname: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String
 }, 
 {
