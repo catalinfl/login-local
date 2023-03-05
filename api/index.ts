@@ -32,21 +32,21 @@ mongoose.connect(URL)
 app.post("/register", async (req: Request, res: Response) => {
 
     const { fname, lname, email, password } = req.body
-
     const encryptedPassword = await bcrypt.hash(password, 10)
-    
     try {
         const oldUser = await User.findOne({ email })
         if (oldUser) {
             res.json({ error: "User exists" })
         }
+        else {
         await User.create<UserSchemaType>({
             fname,
             lname,
             email,
             password: encryptedPassword,
         })
-        res.send({ status: "ok" })
+        res.json({ status: "ok" })
+    }
     }
     catch(err) {
         console.log(err)
@@ -61,7 +61,7 @@ app.post("/login-user", async (req: Request, res: Response) => {
     }
     if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign({ email: user.email }, JWT_SECRET, {
-            expiresIn: 10
+            expiresIn: "1d"
         })
         if (res.status(201)) {
             return res.json({ status: "ok", data: token })

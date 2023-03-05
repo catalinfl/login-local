@@ -63,11 +63,11 @@ const Details = () => {
 
 
         return (
-        (typeof(data) === "object") ? 
+            (typeof(data) === "object") ? 
             <div className="test"> 
             <p> {data.lname} </p>
             <p> {data.email} </p>
-            </div>
+            </div> 
          :
          <p> You are not logged in </p>
     )
