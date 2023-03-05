@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
+import { Navigate, redirect, useLocation } from 'react-router-dom'
 
 export type LoginType = {
   email: string,
@@ -12,8 +13,17 @@ export type LoginType = {
       password: ""
     }
 
+    const location = useLocation()
     const [login, setLogin] = useState<LoginType>(initialLogin);
 
+    const isLoggedIn = window.localStorage.getItem("loggedIn")
+
+    window.localStorage.setItem("messi", "1")
+
+    if (isLoggedIn) {
+      location.pathname = "/"
+      console.log("a mers")
+    }
 
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -37,6 +47,7 @@ export type LoginType = {
           alert("login sucessful")
         }
         window.localStorage.setItem("token", data.data)
+        window.localStorage.setItem("loggedIn", "true")
         window.location.href="./userDetails"
       })
     }

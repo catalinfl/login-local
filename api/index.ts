@@ -49,7 +49,7 @@ app.post("/register", async (req: Request, res: Response) => {
         res.send({ status: "ok" })
     }
     catch(err) {
-        res.send({ status: "error" })
+        console.log(err)
     }
 })
 
@@ -60,7 +60,9 @@ app.post("/login-user", async (req: Request, res: Response) => {
         return res.json({ error: "User not found" })
     }
     if (await bcrypt.compare(password, user.password)) {
-        const token = jwt.sign({ email: user.email }, JWT_SECRET)
+        const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+            expiresIn: 10
+        })
         if (res.status(201)) {
             return res.json({ status: "ok", data: token })
         }
@@ -74,10 +76,21 @@ app.post("/login-user", async (req: Request, res: Response) => {
 })
 
 
+
+
 app.post("/userData", async(req: Request, res: Response) => {
     const { token } = req.body;
     try {
-        const user: jwt.JwtPayload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload
+        const user: any = jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
+            if (err) {
+                return "token expired"
+            }
+            return decoded
+        }
+        )
+        if (user === "token expired") {
+            return res.send({ status: "error", data: "token expired" })
+        }
         const userEmail = user.email
         User.findOne({ email: userEmail })
         .then((data) => {

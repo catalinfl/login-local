@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 
 type InfoType = {
     fname: string,
-    lname: string
+    lname: string,
+    email: string
 }
 
 const Details = () => {
 
     const initial = {
         fname: "",
-        lname: ""
+        lname: "",
+        email: ""
     }
 
-    const [data, setData] = useState<InfoType>(initial);
+    const [data, setData] = useState<InfoType | string>(initial);
 
     function useFetch() {
     fetch("http://localhost:5000/userData", {
@@ -30,7 +33,27 @@ const Details = () => {
         .then((data) => {
             console.log(data, "userData")
             setData(data.data);
+            if (data === "token expired") {
+                alert("Token expired again")
+                window.localStorage.clear();
+                window.location.href = "/"
+            }
         })
+    }
+
+    
+    
+    useEffect(() => {        
+        if (data === "token expired") { 
+            <Navigate to="/blabla" />
+        }
+    }, [data])
+
+
+    const logOut = () => {
+        window.localStorage.removeItem("token")
+        window.localStorage.removeItem("loggedIn")
+        window.location.href="./sign-in"
     }
 
     useEffect(() => {
@@ -38,13 +61,15 @@ const Details = () => {
     }, [])
 
 
+
         return (
-        <div>
-            <p> name </p> 
-            <p> { data.fname } </p>
-            <p> persoana </p> 
-            <p> { data.lname } </p>
-        </div>
+        (typeof(data) === "object") ? 
+            <div className="test"> 
+            <p> {data.lname} </p>
+            <p> {data.email} </p>
+            </div>
+         :
+         <p> You are not logged in </p>
     )
 }
 

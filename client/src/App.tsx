@@ -8,6 +8,7 @@ import UserDet from "./components/Details"
 
 
 function App() {
+  const loggedIn = window.localStorage.getItem("loggedIn");
 
   return (
     <Router>
@@ -37,7 +38,7 @@ function App() {
         <div className="auth-wrapper">
           <div className="auth-inner">
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={loggedIn === "true" ? <UserDet/> : <Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/userDetails" element={<UserDet />} />
